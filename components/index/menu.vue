@@ -1,16 +1,19 @@
 <template>
     <div class="m-menu">
-        <dl class="nav" @mouseleave="mouseleave">
+        <dl class="nav" @mouseleave="wrapper_leave">
             <dt>全部分类</dt>
-            <dd 
-            v-for="(item,idx) in menu" 
-            :key="idx"
-            @mouseenter="enter"> 
-                <i :class="item.type">{{item.name}}</i><span class="arrow"/>
+            <dd v-for="(item,idx) in menu" 
+                :key="idx"
+                @mouseenter="list_enter"
+            > 
+                <i :class="item.type">{{item.name}}</i>
+                <span class="arrow"/>
             </dd>
         </dl>
         <div class="detail"
-        v-if="kind" @mouseenter="sover" @mouseleave="sout">
+            v-if="kind" 
+            @mouseenter="item_enter" 
+            @mouseleave="item_leave">
             <template v-for="(item,idx) in curdetail.child">
                 <h4 :key="idx">{{item.title}}</h4>
                 <span v-for="v in item.child" :key="v">{{v}}</span>
@@ -56,19 +59,19 @@ export default {
         }
     },
     methods:{
-        mouseleave:function(){
+        wrapper_leave:function(){
             let self = this;
             self._timer= setTimeout(function() {
                 self.kind = ''
             },150)
         },
-        enter: function(e) {
+        list_enter: function(e) {
             this.kind = e.target.querySelector('i').className;
         },
-        sover: function () {
+        item_enter: function () {
             clearTimeout(this._timer)
         },
-        sout: function () {
+        item_leave: function () {
             this.kind = ''
         }
     }
